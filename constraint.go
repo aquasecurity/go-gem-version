@@ -44,6 +44,7 @@ type Constraints [][]constraint
 type constraint struct {
 	version  Version
 	operator operatorFunc
+	original string
 }
 
 // NewConstraints parses a given constraint and returns a new instance of Constraints
@@ -79,11 +80,16 @@ func newConstraint(c string) (constraint, error) {
 	return constraint{
 		version:  v,
 		operator: constraintOperators[m[1]],
+		original: c,
 	}, nil
 }
 
 func (c constraint) check(v Version) bool {
 	return c.operator(v, c.version)
+}
+
+func (c constraint) String() string {
+	return c.original
 }
 
 // Check tests if a version satisfies all the constraints.
@@ -95,6 +101,20 @@ func (cs Constraints) Check(v Version) bool {
 	}
 
 	return false
+}
+
+// Returns the string format of the constraints
+func (cs Constraints) String() string {
+	var csStr []string
+	for _, orC := range cs {
+		var cstr []string
+		for _, andC := range orC {
+			cstr = append(cstr, andC.String())
+		}
+		csStr = append(csStr, strings.Join(cstr, ","))
+	}
+
+	return strings.Join(csStr, "||")
 }
 
 func andCheck(v Version, constraints []constraint) bool {

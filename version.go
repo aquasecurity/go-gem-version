@@ -1,7 +1,6 @@
 package gem
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -106,11 +105,7 @@ func (v Version) Compare(other Version) int {
 
 // String returns the full version string
 func (v Version) String() string {
-	var ss []string
-	for _, s := range v.canonicalSegments() {
-		ss = append(ss, fmt.Sprint(s))
-	}
-	return strings.Join(ss, ".")
+	return v.version
 }
 
 // Equal tests if two versions are equal.
@@ -143,7 +138,7 @@ func (v Version) LessThanOrEqual(o Version) bool {
 // https://docs.ruby-lang.org/en/2.6.0/Gem/Version.html#method-i-release
 func (v Version) Release() Version {
 	v.stringSegments = part.Parts{}
-	v.version = v.String()
+	v.version = v.numericSegments.String()
 	return v
 }
 
@@ -157,7 +152,7 @@ func (v Version) Bump() Version {
 	}
 	v.numericSegments = v.numericSegments[:last-1]
 	v.numericSegments[last-2] = v.numericSegments[last-2].(part.Uint64) + 1
-	v.version = v.String()
+	v.version = v.numericSegments.String()
 
 	return v.Release()
 }
