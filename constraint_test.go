@@ -73,11 +73,17 @@ func TestVersion_Check(t *testing.T) {
 		{">=1.2", "1.2", true},
 		{">= 1.2", "1.3", true},
 
-		// List
+		// List: comma separated
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L177-L187
 		{"> 1.1, < 1.3", "1.1", false},
 		{"> 1.1, <1.3", "1.2", true},
 		{"> 1.1, < 1.3", "1.3", false},
+
+		// List: space separated
+		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L177-L187
+		{"> 1.1 < 1.3", "1.1", false},
+		{"> 1.1	<1.3", "1.2", true},
+		{"> 1.1 < 1.3", "1.3", false},
 
 		// Less than
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L177-L187
@@ -174,20 +180,20 @@ func TestVersion_Check(t *testing.T) {
 		// Multiple
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L318-L327
 		{">= 1.4, <= 1.6, != 1.5", "1.3", false},
-		{">= 1.4, <= 1.6, != 1.5", "1.4", true},
-		{">= 1.4, <= 1.6, != 1.5", "1.5", false},
+		{">= 1.4  <= 1.6  != 1.5", "1.4", true},
+		{">= 1.4  <= 1.6  != 1.5", "1.5", false},
 		{">= 1.4, <= 1.6, != 1.5", "1.6", true},
 		{">= 1.4, <= 1.6, != 1.5", "1.7", false},
 		{">= 1.4, <= 1.6, != 1.5", "2.0", false},
 
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L344-L356
 		{">= 1.4.4, < 1.5", "1.4.5", true},
-		{">= 1.4.4, < 1.5", "1.5.0.rc1", true},
+		{">= 1.4.4 <1.5", "1.5.0.rc1", true},
 		{">= 1.4.4, < 1.5", "1.5.0", false},
 
 		{">= 1.4.4, < 1.5.a", "1.4.5", true},
 		{">= 1.4.4, < 1.5.a", "1.5.0.rc1", false},
-		{">= 1.4.4, < 1.5.a", "1.5.0", false},
+		{">= 1.4.4  < 1.5.a", "1.5.0", false},
 
 		// Bad
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L371-L386
