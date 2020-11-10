@@ -56,6 +56,11 @@ func TestVersion_Check(t *testing.T) {
 		{"=1.2", "1.2", true},
 		{"= 1.2", "1.3", false},
 
+		// Equal: ==
+		{"== 1.2", "1.1", false},
+		{"==1.2", "1.2", true},
+		{"== 1.2", "1.3", false},
+
 		// Greater than
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L153-L163
 		{"> 1.2", "1.1", false},
@@ -100,6 +105,7 @@ func TestVersion_Check(t *testing.T) {
 		// Good
 		// https://github.com/rubygems/rubygems/blob/v3.1.4/test/rubygems/test_gem_requirement.rb#L233-L274
 		{"= 0.2.33", "0.2.33", true},
+		{"== 0.2.33", "0.2.33", true},
 		{"> 0.2.33", "0.2.34", true},
 		{"= 1.0", "1.0", true},
 		{"= 1.0", "1.0.0", true},
@@ -191,8 +197,10 @@ func TestVersion_Check(t *testing.T) {
 		{"< 1.2.3", "4.5.6", false},
 		{"> 1.1", "1.0", false},
 		{"= 0.1", "", false},
+		{"== 0.1", "", false},
 		{"> 1.1.1", "1.1.1", false},
 		{"= 1.1", "1.2", false},
+		{"== 1.1", "1.2", false},
 		{"= 1.1", "1.40", false},
 		{"= 1.40", "1.3", false},
 		{"<= 9.3.2", "9.3.3", false},
