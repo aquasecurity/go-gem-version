@@ -53,3 +53,12 @@ for i, raw := range versionsRaw {
 // After this, the versions are properly sorted
 sort.Sort(gem.Collection(versions))
 ```
+
+## Pessimistic Operator
+- `~> 3.0` := `>= 3.0, < 4.0`
+- `~> 3.0.0` := `>= 3.0.0, < 3.1`
+- `~> 3.5` := `>= 3.5, < 4.0`
+- `~> 3.5.0` := `>= 3.5.0, < 3.6`
+- `~> 3` := `>= 3.0, < 4.0`
+
+For more details, see [here](https://thoughtbot.com/blog/rubys-pessimistic-operator)
